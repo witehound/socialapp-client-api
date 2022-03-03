@@ -6,6 +6,7 @@ const dotenv = require("dotenv")
 const app = express()
 const authRoute = require("./routers/auth")
 const userRoute = require("./routers/user")
+const postRoute = require('./routers/post')
 
 dotenv.config()
 
@@ -30,6 +31,9 @@ app.use("/auth", authRoute)
 
 //user route
 app.use("/user", userRoute)
+
+//post route
+app.use('/post', postRoute)
 
 app.get("/", (req,res)=>{
     res.send("welcome")
