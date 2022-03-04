@@ -60,6 +60,27 @@ router.put('/:id/like',async (req,res)=>{
         res.json({message:'failed at init'})
     }
 })
+
+
+//get time line post
+router.get('/timeline', async (req,res)=>{
+    try {
+        const currentUser = await user.findById(req.body.userId)
+        console.log(currentUser)
+        const timeLine = await post.find({userId:currentUser._id})
+        console.log(timeLine)
+        const findPosts = await Promise.all(
+            currentUser.followings.map((freiendId)=>{
+                post.findById(freiendId)
+            })
+        )
+        console.log(findPosts)
+        res.json(timeLine.concat(...findPosts))
+    } catch (error) {
+        res.json({message:'failed at init'})
+    }
+})
+
 //get a post
 router.get('/:id',async (req,res)=>{
     try {
@@ -69,17 +90,7 @@ router.get('/:id',async (req,res)=>{
     catch (error) {
         res.json({message:'failed at init'})
     }
-})
-//get time line post
-router.get('/tiemline',async (req,res)=>{
-    let timeLine = []
-    try {
-        const currentUser = await user.findById(req.body.userId)
-        const timeLinePost = await post.find({userId: req.body._id})
-    }
-    catch (error) {
-        res.json({message:'failed at init'})
-    }
-})
+}
+)
 
 module.exports = router
